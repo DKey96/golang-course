@@ -3,7 +3,7 @@ package main
 import (
 	"booking-app/shared"
 	"fmt"
-	"strings"
+	"strconv"
 )
 
 // Defining variables here, they are package wide (global)
@@ -12,7 +12,8 @@ var conferenceName = "Go Conference"
 const conferenceTickets = 50
 
 var remainingTickets uint = 50
-var bookings = []string{} // To create a dynamic array we use `slice` (it acts as list in python)
+// The number as second input parameter is the initial size of the slice/list. It can be 0 as the slice is dynamic
+var bookings = make([]map[string]string, 0) // To create a dynamic array we use `slice` (it acts as list in python)
 
 func main() {
 	greetUser()
@@ -61,9 +62,8 @@ func greetUser() {
 // Functions with return values must have typed output
 func getFirstNames() []string {
 	firstNames := []string{}
-	for _, name := range bookings {
-		var names = strings.Fields(name)[0]
-		firstNames = append(firstNames, names)
+	for _, bookings := range bookings {
+		firstNames = append(firstNames, bookings["firstName"])
 	}
 	return firstNames
 }
@@ -88,8 +88,18 @@ func getUserInputs() (string, string, string, uint) {
 }
 
 func bookTicket(userTickets uint, firstName string, lastName string, email string) {
-	bookings = append(bookings, firstName+" "+lastName)
 	remainingTickets = remainingTickets - userTickets
+
+	// Create a map for user data
+	var userData = make(map[string]string)
+	userData["firstName"] = firstName
+	userData["lastName"] = lastName
+	userData["email"] = email
+	// GoLang cannot have a map (dict) with mixed datatypes as values
+	// This function formats the Uint into float so we have to add also the number of decimal numbers
+	userData["numberOfTickets"] = strconv.FormatUint(uint64(userTickets), 10)
+
+	bookings = append(bookings, userData)
 
 	fmt.Printf("Thank you %v %v for buying a %v tickets.\nConfirmation sent on %v.\n", firstName, lastName, userTickets, email)
 	fmt.Printf("Remaining tickets: %v\n", remainingTickets)
