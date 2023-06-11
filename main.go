@@ -24,6 +24,7 @@ func main() {
 
 		if isValidName && isValidEmail && isValidTicketsCount {
 			bookTicket(userTickets, firstName, lastName, email)
+			
 			firstNames := getFirstNames()
 			fmt.Printf("First names of bookings are: %v\n", firstNames)
 
@@ -66,13 +67,6 @@ func getFirstNames() []string {
 	return firstNames
 }
 
-// GoLang can also return multiple values as python. All of them must be typed. Types must be enclodes in the braces
-func validateUserInputs(firstName string, lastName string, email string, userTickets uint) (bool, bool, bool) {
-	isValidName := len(firstName) >= 2 && len(lastName) >= 2
-	isValidEmail := strings.Contains(email, "@")
-	isValidTicketsCount := userTickets > 0 && userTickets <= remainingTickets
-	return isValidName, isValidEmail, isValidTicketsCount
-}
 
 func getUserInputs() (string, string, string, uint) {
 	var firstName string
