@@ -3,7 +3,6 @@ package main
 import (
 	"booking-app/shared"
 	"fmt"
-	"strconv"
 )
 
 // Defining variables here, they are package wide (global)
@@ -12,8 +11,18 @@ var conferenceName = "Go Conference"
 const conferenceTickets = 50
 
 var remainingTickets uint = 50
+
 // The number as second input parameter is the initial size of the slice/list. It can be 0 as the slice is dynamic
-var bookings = make([]map[string]string, 0) // To create a dynamic array we use `slice` (it acts as list in python)
+var bookings = make([]UserData, 0) // To create a dynamic array we use `slice` (it acts as list in python)
+
+// Structure allowes us to define predefined structure with mixed types
+// Struct can be compared to a class in other languages
+type UserData struct {
+	firstName       string
+	lastName        string
+	email           string
+	numberOfTickets uint
+}
 
 func main() {
 	greetUser()
@@ -63,7 +72,7 @@ func greetUser() {
 func getFirstNames() []string {
 	firstNames := []string{}
 	for _, bookings := range bookings {
-		firstNames = append(firstNames, bookings["firstName"])
+		firstNames = append(firstNames, bookings.firstName)
 	}
 	return firstNames
 }
@@ -91,13 +100,12 @@ func bookTicket(userTickets uint, firstName string, lastName string, email strin
 	remainingTickets = remainingTickets - userTickets
 
 	// Create a map for user data
-	var userData = make(map[string]string)
-	userData["firstName"] = firstName
-	userData["lastName"] = lastName
-	userData["email"] = email
-	// GoLang cannot have a map (dict) with mixed datatypes as values
-	// This function formats the Uint into float so we have to add also the number of decimal numbers
-	userData["numberOfTickets"] = strconv.FormatUint(uint64(userTickets), 10)
+	var userData = UserData{
+		firstName:       firstName,
+		lastName:        lastName,
+		email:           email,
+		numberOfTickets: userTickets,
+	}
 
 	bookings = append(bookings, userData)
 
