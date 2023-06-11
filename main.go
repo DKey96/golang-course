@@ -34,23 +34,36 @@ func main() {
 		fmt.Scan(&email)	
 		fmt.Println("Enter number of tickets")
 		fmt.Scan(&userTickets)		
-
-		//bookings[conferenceTickets - remainingTickets] = firstName + " " + lastName
-		bookings = append(bookings, firstName + " " + lastName)
-		remainingTickets = remainingTickets - userTickets
 		
-		fmt.Printf("Thank you %v %v for buying a %v tickets.\nConfirmation sent on %v.\n", firstName, lastName, userTickets, email)
-		fmt.Printf("Remaining tickets: %v\n", remainingTickets)
+		if userTickets > remainingTickets {
+			fmt.Printf("Only %v tickets are available.\n", remainingTickets)
+		} else {
+			//bookings[conferenceTickets - remainingTickets] = firstName + " " + lastName
+			bookings = append(bookings, firstName + " " + lastName)
+			remainingTickets = remainingTickets - userTickets
+			
+			fmt.Printf("Thank you %v %v for buying a %v tickets.\nConfirmation sent on %v.\n", firstName, lastName, userTickets, email)
+			fmt.Printf("Remaining tickets: %v\n", remainingTickets)
 
-		// For-each loop
-		firstNames := []string{}
+			// For-each loop
+			firstNames := []string{}
 
-		// we must use range to have an index and value returned (as enumerate in python)
-		for _, name := range bookings{
-			var names = strings.Fields(name)[0]
-			firstNames = append(firstNames, names)
+			// we must use range to have an index and value returned (as enumerate in python)
+			for _, name := range bookings{
+				var names = strings.Fields(name)[0]
+				firstNames = append(firstNames, names)
+			}
+
+			fmt.Printf("First names of bookings are: %v\n", firstNames)
+
+			// noTicketsRemaining := remainingTickets == 0
+			// if noRemainingTickets {
+			if remainingTickets == 0 {
+				fmt.Println("The conference is booked out. Please come next year.")
+				break
+			} else {
+				continue
+			}
 		}
-
-		fmt.Printf("First names of bookings are: %v\n", firstNames)
 	}
 }
