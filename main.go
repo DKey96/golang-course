@@ -3,6 +3,7 @@ package main
 import (
 	"booking-app/shared"
 	"fmt"
+	"time"
 )
 
 // Defining variables here, they are package wide (global)
@@ -34,7 +35,11 @@ func main() {
 		isValidName, isValidEmail, isValidTicketsCount := shared.ValidateUserInputs(firstName, lastName, email, userTickets, remainingTickets)
 
 		if isValidName && isValidEmail && isValidTicketsCount {
+
 			bookTicket(userTickets, firstName, lastName, email)
+			// Rund sending an email in different thread
+			// The `go` keyword is used to run a code in a different thread
+			go sendTicket(userTickets, firstName, lastName, email)
 
 			firstNames := getFirstNames()
 			fmt.Printf("First names of bookings are: %v\n", firstNames)
@@ -111,4 +116,12 @@ func bookTicket(userTickets uint, firstName string, lastName string, email strin
 
 	fmt.Printf("Thank you %v %v for buying a %v tickets.\nConfirmation sent on %v.\n", firstName, lastName, userTickets, email)
 	fmt.Printf("Remaining tickets: %v\n", remainingTickets)
+}
+
+func sendTicket(userTickets uint, firstName string, lastName string, email string) {
+	ticketText := fmt.Sprintf("%v tickets for %v %v.\n", userTickets, firstName, lastName)
+	time.Sleep(10 * time.Second)
+	fmt.Println("#################################")
+	fmt.Printf("Sending ticket:\n %v \nto email address %v\n", ticketText, email)
+	fmt.Println("#################################")
 }
