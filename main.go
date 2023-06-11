@@ -1,6 +1,7 @@
 package main
 
 import (
+	"booking-app/shared"
 	"fmt"
 	"strings"
 )
@@ -20,11 +21,11 @@ func main() {
 	// Infinite loop
 	for {
 		firstName, lastName, email, userTickets := getUserInputs()
-		isValidName, isValidEmail, isValidTicketsCount := validateUserInputs(firstName, lastName, email, userTickets)
+		isValidName, isValidEmail, isValidTicketsCount := shared.ValidateUserInputs(firstName, lastName, email, userTickets, remainingTickets)
 
 		if isValidName && isValidEmail && isValidTicketsCount {
 			bookTicket(userTickets, firstName, lastName, email)
-			
+
 			firstNames := getFirstNames()
 			fmt.Printf("First names of bookings are: %v\n", firstNames)
 
@@ -66,7 +67,6 @@ func getFirstNames() []string {
 	}
 	return firstNames
 }
-
 
 func getUserInputs() (string, string, string, uint) {
 	var firstName string
